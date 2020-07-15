@@ -21,28 +21,22 @@
 {% endblock %}
 
 {% block content %}
-<div style="container">
-    <div class="row">
-        <div class="col-lg-8 col-md-10 mx-auto">
-            <ul>
-                {% for date in date_list %}
-                    <li style="display: inline;">
-                        <a href="{% url 'blog:post_year_archive' date|date:'Y' %}">Year{{ date|date:"Y" }}</a>
-                    </li>
-                {% endfor %}
-            </ul>
-            <div>
-                <ul>
-                    {% for post in object_list %}
-                    <li>{{ post.modify_dt|date:"Y-m-d" }}&nbsp;&nbsp;&nbsp;
-                    <a href="{{ post.get_absolute_url }}"><strong>{{ post.title }}</strong></a></li>
-                    {% endfor %}
-                </ul>
-            </div>
-            <br/>
-        </div>
-    </div>
+<ul>
+    {% for date in date_list %}
+        <li style="display: inline;">
+            <a href="{% url 'blog:post_year_archive' date|date:'Y' %}">Year{{ date|date:"Y" }}</a>
+        </li>
+    {% endfor %}
+</ul>
+<div>
+    <ul>
+        {% for post in object_list %}
+        <li>{{ post.modify_dt|date:"Y-m-d" }}&nbsp;&nbsp;&nbsp;
+        <a href="{{ post.get_absolute_url }}"><strong>{{ post.title }}</strong></a></li>
+        {% endfor %}
+    </ul>
 </div>
+<br/>
 
 {% endblock %}
 
