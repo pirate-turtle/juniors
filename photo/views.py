@@ -22,7 +22,7 @@ class PhotoDV(DetailView):
 
 
 #-- Create/Change-list/Update/Delete for Photo
-class PostCV(LoginRequiredMixin, CreateView):
+class PhotoCV(LoginRequiredMixin, CreateView):
     model = Photo
     fields = ('album', 'title', 'image', 'description')
     success_url = reverse_lazy('photo:index')
@@ -66,7 +66,7 @@ class AlbumDelV(OwnerOnlyMixin, DeleteView):
 
 
 #-- (InlineFormSet) Create/Update for Album)
-class AlbumPostCV(LoginRequiredMixin, CreateView):
+class AlbumPhotoCV(LoginRequiredMixin, CreateView):
     model = Album
     fields = ('name', 'description')
     success_url = reverse_lazy('photo:index')
