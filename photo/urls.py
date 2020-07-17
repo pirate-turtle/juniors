@@ -19,7 +19,7 @@ urlpatterns = [
     path('album/add/',
          views.AlbumPhotoCV.as_view(), name="album_add",
     ),
-    
+
     # Example: /photo/album/change/
     path('album/change/',
         views.AlbumChangeLV.as_view(), name="album_change",
