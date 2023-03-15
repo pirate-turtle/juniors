@@ -16,7 +16,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from mysite.views import OwnerOnlyMixin
 
-# Create your views here.
+import logging
+
+logger = logging.getLogger()
 
 #-- ListView
 class PostLV(ListView):
@@ -43,6 +45,7 @@ class PostDV(DetailView):
 class PostAV(ArchiveIndexView):
     model = Post
     date_field = 'modify_dt'
+    allow_empty = True
 
 
 class PostYAV(YearArchiveView):
