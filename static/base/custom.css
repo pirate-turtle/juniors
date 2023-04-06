@@ -1,0 +1,29 @@
+/* 
+구글 폰트의 나눔 고딕 글꼴 적용
+https://fonts.google.com/specimen/Nanum+Gothic
+
+사용방법 참고
+https://developers.google.com/fonts/docs/css2?hl=ko
+
+*/
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
+
+.navbar-brand {
+	font-family: 'Nanum Gothic', sans-serif;
+	font-weight: 800;
+	font-size: 36px;
+}
+
+.navbar-nav {
+	margin: 1rem;
+}
+
+.nav-item {
+	font-size: 20px;
+}
+
+body {
+	padding-top:120px;
+	font-family: 'Nanum Gothic', sans-serif;
+	font-weight: 400;
+}
