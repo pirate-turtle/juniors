@@ -1,201 +1,58 @@
 <!DOCTYPE html>
-{% load static %}
-<html lang="en">
-
+<html lang="ko">
 <head>
-
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
-
-  <title>{% block title %} base.html {% endblock %}</title>
-
-  <!-- Bootstrap core CSS -->
-  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-
-  <!-- Custom fonts for this template -->
-  <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
-  <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
-
-  <!-- Custom styles for this template -->
-  <link href="{% static 'css/clean-blog.min.css' %}" rel="stylesheet">
-
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.2.3/dist/zephyr/bootstrap.css">
+    
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'base/custom.css' %}">
+    <link rel="shortcut icon" href="{% static 'base/favicon.ico' %}">
 </head>
-
 <body>
-
-  <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+  <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
     <div class="container">
-      <a class="navbar-brand" href="{% url 'home' %}">Home</a>
-      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-        Menu
-        <i class="fas fa-bars"></i>
+      <a class="navbar-brand" href="/">
+        <img src="{% static 'base/junior.png' %}" height="50px">
+        주니어즈
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarResponsive">
-        <ul class="navbar-nav ml-auto">
+      <div class="collapse navbar-collapse" id="navbarColor01">
+        <ul class="navbar-nav me-auto">
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'bookmark:index' %}">Bookmark</a>
+            <a class="nav-link active" href="/">Home
+              <span class="visually-hidden">(current)</span>
+            </a>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Blog
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="{% url 'blog:index' %}">Post</a>
-              <a class="dropdown-item" href="{% url 'blog:post_archive' %}">Archive</a>
-              <a class="dropdown-item" href="{% url 'blog:search' %}">Search</a>
-              <div class="dropdown-divider"></div>
-            </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'photo:index' %}">Photo</a>
-          </li>
-          <!-- <li class="nav-item">
-            <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
-          </li> -->
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Add
-            </a>
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">추천이요👍</a>
             <div class="dropdown-menu">
-              <a class="dropdown-item" href="{% url 'bookmark:add' %}">Bookmark</a>
-              <a class="dropdown-item" href="{% url 'blog:add' %}">Post</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="{% url 'photo:album_add' %}">Album</a>
-              <a class="dropdown-item" href="{% url 'photo:photo_add' %}">Photo</a>
+              <a class="dropdown-item" href="{% url 'recommend:link_list' %}">자료 링크</a>
+              <a class="dropdown-item disabled" href="#">도서 (개발중)</a>
             </div>
           </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Change
-            </a>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="{% url 'bookmark:change' %}">Bookmark</a>
-              <a class="dropdown-item" href="{% url 'blog:change' %}">Post</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="{% url 'photo:album_change' %}">Album</a>
-              <a class="dropdown-item" href="{% url 'photo:photo_change' %}">Photo</a>
-            </div>
           </li>
-          <li class="nav-item dropdown">
-            {% if user.is_active %}
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="fas fa-user"></i>&nbsp;{% firstof user.get_short_name user.get_username %}&ensp;</a>
-            </a>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
-              <a class="dropdown-item" href="{% url 'password_change' %}">Change Password</a>
-            </div>
-            {% else %}
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="fas fa-user"></i>&nbsp;Anonymous&ensp;</a>
-            </a>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="{% url 'login' %}">Login</a>
-              <a class="dropdown-item" href="{% url 'register' %}">Register</a>
-            </div>
-            {% endif %}
-          </li>
-<!--          <li class="nav-item">-->
-<!--            <form class="form-inline my-2 my-lg-0" action="" method="post"> {% csrf_token %}-->
-<!--              <input class="form-control mr-sm-2" type="search" placeholder="global search" aria-label="Search"-->
-<!--              name="search word">-->
-<!--              <button class="btn btn-primary my-2 my-sm-0" type="submit">Search</button>-->
-<!--            </form>-->
-<!--          </li>-->
+          {% comment %} <li class="nav-item">
+            <a class="nav-link" href="#">게시판</a>
+          </li> {% endcomment %}
+          
         </ul>
+        {% comment %} <form class="d-flex">
+          <input class="form-control me-sm-2" type="search" placeholder="Search">
+          <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+        </form> {% endcomment %}
       </div>
-    </div>
-  </nav>
-
-  <!-- Page Header -->
-  {% block header %}  {% endblock %}
-
-
-  {% block extra-style %}
-  <style type="text/css">
-  .tag-cloud {
-      width: 40%;
-      margin-left: 30px;
-      text-align: center;
-      padding: 5px;
-      border: 1px solid orange;
-      background-color: #ffc;
-  }
-  .tag-1 {font-size: 12px;}
-  .tag-2 {font-size: 14px;}
-  .tag-3 {font-size: 16px;}
-  .tag-4 {font-size: 18px;}
-  .tag-5 {font-size: 20px;}
-  .tag-6 {font-size: 24px;}
-  </style>
-
-  <style>
-  .post-body {
-    width: 100%;
-    margin: auto;
-    font-family: "Lucida Grande", Verdana, Arial, sans-serif;
-    font-size: 16px;
-  }
-  </style>
-  {% endblock %}
-
-  <!-- Main Content -->
-  <div class="container">
-      <div class="row">
-          <div class="col-lg-8 col-md-10 mx-auto">
-              {% block content %} {% endblock %}
-          </div>
-      </div>
+    </nav>
   </div>
-
-  <!-- Footer -->
-  <footer>
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-8 col-md-10 mx-auto">
-          <ul class="list-inline text-center">
-            <li class="list-inline-item">
-              <a href="https://twitter.com/">
-                <span class="fa-stack fa-lg">
-                  <i class="fas fa-circle fa-stack-2x"></i>
-                  <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
-                </span>
-              </a>
-            </li>
-            <li class="list-inline-item">
-              <a href="https://www.facebook.com/">
-                <span class="fa-stack fa-lg">
-                  <i class="fas fa-circle fa-stack-2x"></i>
-                  <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
-                </span>
-              </a>
-            </li>
-            <li class="list-inline-item">
-              <a href="https://pages.github.com/">
-                <span class="fa-stack fa-lg">
-                  <i class="fas fa-circle fa-stack-2x"></i>
-                  <i class="fab fa-github fa-stack-1x fa-inverse"></i>
-                </span>
-              </a>
-            </li>
-          </ul>
-          <p class="copyright text-muted">Copyright &copy; Your Website 2020</p>
-        </div>
-      </div>
-    </div>
-  </footer>
-
-  <!-- Bootstrap core JavaScript -->
-  <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
-  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-
-  <!-- Custom scripts for this template -->
-  <script src="{% static 'js/clean-blog.min.js' %}"></script>
-  {% block extra-script %}{% endblock %}
+  
+  <div class="container">
+    {% block content %}{% endblock content %}
+  </div>
+  <script src={% static "base/bootstrap.bundle.min.js" %}></script>
+  <script src={% static "base/prism.js" %} data-manual></script>  
 </body>
-
 </html>
