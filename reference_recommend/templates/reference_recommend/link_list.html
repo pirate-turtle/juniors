@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}공부하기 좋았던 자료 추천{% endblock title %}
+{% block content %}
+
+{% if object_list %}
+<button type="button" class="btn btn-outline-success"  onclick="location.href='{% url 'recommend:create' %}'">등록하기</button>
+{% endif %}
+
+<div class="row">
+    {% for info in object_list %}
+    <div class="col-lg-3">            
+        <div class="bs-component">
+            <div class="list-group">
+                <a href="{{ info.url }}" class="list-group-item-action flex-column align-items-start active">
+                    {% if info.image is not None %}
+                    <img src="{{ info.image }}" class="d-block user-select-none">
+                    {% else %}
+                    {% load static %}
+                    <img src="{% static 'base/default.png' %}" class="d-block user-select-none">
+                    {% endif %}
+                </a>
+                <a href="{{ info.url }}" class="list-group-item list-group-item-action flex-column align-items-start">
+                    <span class="badge rounded-pill {{ info.category }}">{{ info.get_category_display }}</span>
+                    <p class="mb-1">
+                        {% if info.memo is not None %}
+                        {{ info.memo }}
+                        <hr/>
+                        {% endif %}                        
+                    </p>
+
+                    <div class="d-flex w-100 justify-content-between">
+                        <p class="mb-1 text-muted">{{ info.title }}</p>                        
+                    </div>
+
+                    <p class="text-muted" style="font-size:small">{{ info.description }}</p>                        
+                    <small class="text-muted" style="font-size:x-small; word-break: break-all">{{ info.url }}</small>
+                </a>
+            </div>
+        </div>
+    </div>
+    {% empty %}        
+        <figure class="text-center alert alert-warning" style="margin:auto; margin-top:10%; padding-top:2rem; padding-bottom:2rem; width:80%">
+            <h1>이런..!</h1>
+            <h3>추천 자료가 아직 없습니다</h3>
+            <p>좋은 자료가 있다면 추천해주실래요? 🥰</p>
+
+            <button type="button" class="btn btn-success" onclick="location.href='{% url 'recommend:create' %}'">등록하기</button>
+        </figure>
+    {% endfor%}            
+</div>
+
+{% endblock content %}

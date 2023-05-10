@@ -8,12 +8,16 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.2.3/dist/zephyr/bootstrap.css">
     
     {% load static %}
-    <link rel="stylesheet" href="{% static "base/custom.css" %}">
+    <link rel="stylesheet" href="{% static 'base/custom.css' %}">
+    <link rel="shortcut icon" href="{% static 'base/favicon.ico' %}">
 </head>
 <body>
   <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
     <div class="container">
-      <a class="navbar-brand" href="/">주니어즈</a>
+      <a class="navbar-brand" href="/">
+        <img src="{% static 'base/junior.png' %}" height="50px">
+        주니어즈
+      </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -27,14 +31,14 @@
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">추천이요👍</a>
             <div class="dropdown-menu">
-              <a class="dropdown-item" href="#">자료 링크</a>
-              <a class="dropdown-item" href="#">도서</a>
+              <a class="dropdown-item" href="{% url 'recommend:link_list' %}">자료 링크</a>
+              <a class="dropdown-item disabled" href="#">도서 (개발중)</a>
             </div>
           </li>
           </li>
-          <li class="nav-item">
+          {% comment %} <li class="nav-item">
             <a class="nav-link" href="#">게시판</a>
-          </li>
+          </li> {% endcomment %}
           
         </ul>
         {% comment %} <form class="d-flex">

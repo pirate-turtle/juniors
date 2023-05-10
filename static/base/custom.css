@@ -22,8 +22,46 @@ https://developers.google.com/fonts/docs/css2?hl=ko
 	font-size: 20px;
 }
 
+.list-group {
+	margin-top: 1rem;
+	position: relative;
+}
+
+.list-group-item-action > img {
+	object-fit:cover;
+	width: 100%;
+	height: 12rem;
+	border-top-right-radius: var(--bs-list-group-border-radius);
+	border-top-left-radius: var(--bs-list-group-border-radius);
+}
+
 body {
 	padding-top:120px;
 	font-family: 'Nanum Gothic', sans-serif;
 	font-weight: 400;
+}
+
+span.wb {
+	background-color: blueviolet;
+}
+span.mb {
+	background-color: green;
+}
+span.dt {
+	background-color: darkblue;
+}
+span.db {
+	background-color: olivedrab;
+}
+span.gm {
+	background-color: coral;
+}
+span.ai {
+	background-color: palevioletred;
+}
+span.cs {
+	background-color: purple;
+}
+span.et {
+	background-color: darkorange;
 }
