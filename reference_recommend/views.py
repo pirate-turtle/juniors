@@ -1,10 +1,13 @@
 from typing import Any, Dict
-from django.views.generic import ListView, CreateView
+from django.forms.models import BaseModelForm
+from django.http import HttpResponse
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import ReferenceLink
 from .forms import LinkRegisterForm
-import requests
-from bs4 import BeautifulSoup
+from site4programmers.views import WriterMixin
+
 
 # 추천한 링크 리스트 넘기기
 class LinkListView(ListView):
@@ -13,7 +16,8 @@ class LinkListView(ListView):
 
 
 # 추천할 링크 리스트 등록하기
-class LinkCreateView(CreateView):
+class LinkCreateView(LoginRequiredMixin, CreateView):
+    model = ReferenceLink
     form_class = LinkRegisterForm
     success_url = reverse_lazy('recommend:link_list')
     template_name = 'reference_recommend/link_list_create.html'
@@ -21,41 +25,38 @@ class LinkCreateView(CreateView):
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context['category'] = ReferenceLink.Category.choices
+        context['user_agent'] = self.request.META['HTTP_USER_AGENT']
         return context
-
-    ## TODO
+    
     def form_valid(self, form):
-        url = form.cleaned_data['url']
-        print(url)
-        print(form.instance)
-        response = requests.get(url)
-
-        if response.status_code == 200:
-            response.encoding = "utf-8" # 한글이 깨지지 않도록 설정
-            html = response.text            
-            soup = BeautifulSoup(html, 'html.parser')
-            form.instance.title = soup.select_one('meta[property="og:title"]')['content']
-
-            image_url = soup.select_one('meta[property="og:image"]')['content']
-            # 이미지 url이 상대경로로 적힌 경우 처리
-            if image_url.startswith("/"):
-                _url = url.split("://")
-                top_url = _url[0] + "://" + _url[1].split("/")[0]
-                form.instance.image = top_url + image_url
-            else:
-                form.instance.image = image_url
-
-            # 사이트 설명이 30자를 초과하는 경우 처리
-            desc = soup.select_one('meta[property="og:description"]')['content']
-            if len(desc) > 30:
-                form.instance.description = desc[:27] + '...'
-            else:
-                form.instance.description = desc
-
-            
-            
-        else:
-            ## TODO 오류 페이지로 연동
-            print(response.status_code)
+        form.instance.writer = self.request.user
 
         return super().form_valid(form)
+
+
+# 등록한 추천자료 링크 보기
+class MyLinkListView(LoginRequiredMixin, ListView):
+    template_name = 'reference_recommend/link_list.html'
+
+    def get_queryset(self):
+        return ReferenceLink.objects.filter(writer=self.request.user)
+
+
+# 등록한 추천자료 링크 수정
+class LinkUpdateView(WriterMixin, UpdateView):
+    model = ReferenceLink
+    form_class = LinkRegisterForm
+    template_name = 'reference_recommend/link_list_create.html'
+    success_url = reverse_lazy('recommend:link_list')
+
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context['category'] = ReferenceLink.Category.choices
+        context['user_agent'] = self.request.META['HTTP_USER_AGENT']
+        return context
+
+
+# 등록한 추천자료 링크 삭제
+class LinkDeleteView(WriterMixin, DeleteView):
+    model = ReferenceLink
+    success_url = reverse_lazy('recommend:link_list')

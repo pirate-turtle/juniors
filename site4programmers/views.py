@@ -5,6 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.mixins import AccessMixin
 
 
 class HomeView(TemplateView):
@@ -30,3 +31,15 @@ class UserJoinView(CreateView):
 
 class UserJoinCompleteView(TemplateView):
     template_name = 'registration/join_done.html'
+
+
+class WriterMixin(AccessMixin):
+    raise_exception = False
+
+    def dispatch(self, request, *args, **kwargs):
+        obj = self.get_object()
+        if request.user != obj.writer:
+            return self.handle_no_permission()
+        
+        return super().dispatch(request, *args, **kwargs)
+    

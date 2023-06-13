@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # 추천하는 자료 링크
 class ReferenceLink(models.Model):
@@ -17,6 +18,7 @@ class ReferenceLink(models.Model):
       - 이미지 : image
 
     - 표시할 링크 (너무 길 경우를 대비해서 https://~/ 까지만 자르기)
+    - 해당 자료를 등록한 유저의 username
     """
     
     url = models.URLField(max_length=200, unique=True)
@@ -41,3 +43,4 @@ class ReferenceLink(models.Model):
     title = models.CharField(max_length=15)
     description = models.CharField(max_length=30)
     image = models.URLField(max_length=200, blank=True, null=True)
+    writer = models.ForeignKey(User, on_delete=models.CASCADE)

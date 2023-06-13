@@ -13,12 +13,12 @@
     <fieldset>
       <legend>추천할 자료 상세 정보</legend>
       <div class="form-group">
-        <label for="url" class="form-label mt-4">링크</label>
+        <label for="{{ form.url.id_for_label }}" class="form-label mt-4">링크</label>
         {{ form.url }}
         <small id="urlHelp" class="form-text text-muted">추천하고 싶은 자료의 링크를 입력해주세요 (https://example.com)</small>
       </div>
       <div class="form-group">
-        <label for="memo" class="form-label mt-4">설명</label>
+        <label for="{{ form.memo.id_for_label }}" class="form-label mt-4">설명</label>
         {{ form.memo }}
         <small id="memoHelp" class="form-text text-muted">(공백 포함 최대 50자)</small>
       </div>      
