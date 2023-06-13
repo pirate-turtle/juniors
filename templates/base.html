@@ -28,23 +28,32 @@
               <span class="visually-hidden">(current)</span>
             </a>
           </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">추천이요👍</a>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="{% url 'recommend:link_list' %}">자료 링크</a>
-              <a class="dropdown-item disabled" href="#">도서 (개발중)</a>
-            </div>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'recommend:link_list' %}">추천해요</a>
+          </li>          
+          <li class="nav-item">
+            <a class="nav-link disabled" href="#">게시판 (개발중)</a>
           </li>
-          </li>
-          {% comment %} <li class="nav-item">
-            <a class="nav-link" href="#">게시판</a>
-          </li> {% endcomment %}
           
         </ul>
-        {% comment %} <form class="d-flex">
-          <input class="form-control me-sm-2" type="search" placeholder="Search">
-          <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-        </form> {% endcomment %}
+        <ul class="navbar-nav">
+          <li class="nav-item dropdown">
+            {% if user.is_active %}
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">👨‍💻{{ user.get_username }}</a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="{% url 'recommend:my_link' %}">나의 활동</a>
+              <a class="dropdown-item" href="{% url 'password_change' %}">비밀번호 변경</a>
+              <a class="dropdown-item" href="{% url 'logout' %}">로그아웃</a>              
+            </div>
+            {% else %}
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">로그인이 필요합니다</a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="{% url 'join' %}">회원가입</a>
+              <a class="dropdown-item" href="{% url 'login' %}">로그인</a>              
+            </div>
+            {% endif %}
+          </li>
+        </ul>
       </div>
     </nav>
   </div>

@@ -65,3 +65,9 @@ span.cs {
 span.et {
 	background-color: darkorange;
 }
+
+dialog {
+	border: 0px;
+	border-radius: var(--bs-border-radius);
+	padding: unset;
+}

@@ -2,10 +2,13 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from site4programmers.views import HomeView
+from site4programmers.views import HomeView, UserJoinView, UserJoinCompleteView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('auth/', include('django.contrib.auth.urls')),
+    path('auth/join/', UserJoinView.as_view(), name='join'),
+    path('auth/join/done/', UserJoinCompleteView.as_view(), name='join_done'),
     path('', HomeView.as_view()),
     path('recommend/', include('reference_recommend.urls'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

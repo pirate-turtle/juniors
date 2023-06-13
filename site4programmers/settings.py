@@ -133,3 +133,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_URL = '/auth/login'   # 설정하지 않으면 기본적으로 accounts/login으로 연결됨
+LOGIN_REDIRECT_URL = '/'    # next 파라미터가 설정되지 않은 경우 홈 화면으로 리다이렉트되도록 설정
+LOGOUT_REDIRECT_URL = '/'   # 로그아웃 페이지를 따로 두지 않고 홈 화면으로 리다이렉트되도록 설정
