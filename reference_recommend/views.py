@@ -20,12 +20,16 @@ class LinkCreateView(LoginRequiredMixin, CreateView):
     model = ReferenceLink
     form_class = LinkRegisterForm
     success_url = reverse_lazy('recommend:link_list')
-    template_name = 'reference_recommend/link_list_create.html'
+    template_name = 'reference_recommend/link_list_create.html'       
     
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        # user agent 추출해서 url 검증 단계에 헤더로 사용할 수 있도록 넘겨주기
+        form = self.get_form_class()
+        form.user_agent = self.request.META['HTTP_USER_AGENT']
+
         context = super().get_context_data(**kwargs)
-        context['category'] = ReferenceLink.Category.choices
-        context['user_agent'] = self.request.META['HTTP_USER_AGENT']
+        context['category'] = ReferenceLink.Category.choices                
+
         return context
     
     def form_valid(self, form):

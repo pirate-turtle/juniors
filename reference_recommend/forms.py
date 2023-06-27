@@ -11,6 +11,9 @@ from bs4 import BeautifulSoup
 
 
 class LinkRegisterForm(ModelForm):
+
+    user_agent = ''
+
     class Meta:
         model = ReferenceLink
         fields = ['url', 'memo', 'category']
@@ -36,10 +39,11 @@ class LinkRegisterForm(ModelForm):
 
     # url 검증 
     def clean_url(self):
-        # TODO View에서 request header에서 user agent 추출까지는 성공
-        # context 데이터 받아와서 requests 헤더로 설정해야함
         url = self.cleaned_data['url']
-        response = requests.get(url)        
+        
+        # 헤더 설정하지 않으면 크롤링 봇으로 인식하여 406 에러 발생하는 경우 있음
+        headers = { 'User-Agent': self.user_agent }
+        response = requests.get(url, headers=headers)
 
         if response.status_code != 200:
             raise ValidationError('정확한 링크인지 확인해주세요. (response code: { %(status_code)s })',
