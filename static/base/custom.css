@@ -35,6 +35,27 @@ https://developers.google.com/fonts/docs/css2?hl=ko
 	border-top-left-radius: var(--bs-list-group-border-radius);
 }
 
+.list-group-item > a > p.memo {
+	height: 4rem;
+	display: flex;
+	align-items: center;
+	word-break: break-all;
+}
+
+.list-group-item > a > p.description {
+	height: 2rem;
+	display: flex;
+	align-items: center;
+	word-break: break-all;
+}
+
+.list-group > .button-area {
+	position: absolute;
+	right: 0.5rem;
+	top: 0.5rem;
+	z-index: 3;
+}
+
 body {
 	padding-top:120px;
 	font-family: 'Nanum Gothic', sans-serif;
@@ -70,4 +91,29 @@ dialog {
 	border: 0px;
 	border-radius: var(--bs-border-radius);
 	padding: unset;
+}
+
+th {
+	font-weight: 600;
+}
+
+.pagination {
+	font-family: var(--bs-font-sans-serif);
+	justify-content: center;
+}
+
+a.card-link {
+	position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.card-body > .title-area {
+	display: flex;
+	align-items: baseline;
+}
+
+.card-body > .title-area > .comments-count {
+	color: var(--bs-primary);
+	margin-left: 0.5rem;
 }

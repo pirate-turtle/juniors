@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% block title %}마이페이지{% endblock title %}
+{% block content %}
+
+<div name="my_links" class="mb-5">
+    <h3>등록한 추천자료</h3>
+    <table class="table" style="word-break: break-all">
+        <colgroup>
+            <col style="width: 5%">
+            <col style="width: 35%">
+            <col style="width: 30%">
+            <col style="width: 15%">
+        </colgroup>
+        <thead class="table-primary">
+            <th scope="col"></th>
+            <th scope="col">설명</th>
+            <th scope="col">url</th>
+            <th scope="col"></th>
+        </thead>
+        <tbody>
+            {% for link in links %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ link.memo }}</td>
+                <td><a href="{{ link.url }}">{{ link.url }}</a></td>
+                <td style="text-align: center">
+                    <button type="button" class="btn btn-light mx-1 my-1" onclick="location.href='{% url 'recommend:link_update' pk=link.id %}'">수정</button>
+                    <button type="button" class="btn btn-danger" onclick="showDeleteConfirmDialog('link', {{ link.id }})">삭제</button>
+                </td>                
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>    
+</div>
+
+<div name="my_posts">
+    <h3>등록한 게시글</h3>
+    <table class="table" style="word-break: break-all">
+        <colgroup>
+            <col style="width: 5%">
+            <col style="width: 25%">
+            <col style="width: 20%">
+            <col style="width: 20%">
+            <col style="width: 10%">
+        </colgroup>
+        <thead class="table-primary">
+            <th scope="col"></th>
+            <th scope="col">제목</th>
+            <th scope="col">작성일</th>
+            <th scope="col">수정일</th>
+            <th scope="col">댓글수</th>
+            <th scope="col"></th>
+        </thead>
+        <tbody>
+            {% for post in posts %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ post.title }}</td>
+                <td>{{ post.create_dt }}</td>
+                <td>{{ post.modify_dt }}</td>
+                <td>{{ post.comments.all | length }}</td>
+                <td style="text-align: center">
+                    <button type="button" class="btn btn-light mx-1" onclick="location.href='{% url 'post:post_update' pk=post.id %}'">수정</button>
+                    <button type="button" class="btn btn-danger" onclick="showDeleteConfirmDialog('post', {{ post.id }})">삭제</button>
+                </td>
+            </tr>    
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<dialog id="delete-modal">
+    <form method="dialog">            
+        <div class="modal-header p-3">
+            <h5 id="modal-title">삭제</h5>
+            <span aria-hidden="true"></span>
+            </button>
+        </div>
+        <div class="modal-body px-3 pb-3">
+            <p id="modal-content">삭제하시겠어요?</p>
+        </div>
+        <div class="modal-footer px-2 py-2">
+            <button type="submit" class="btn btn-danger mx-1" id="delete-btn">삭제</button>
+            <button value="cancel" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+        </div>        
+    </form>
+</dialog>
+
+<script>
+    let request_url = undefined
+    const delModal = document.getElementById('delete-modal')
+    const delBtnOnModal = document.getElementById('delete-btn')
+    const modalTitle = document.getElementById('modal-title')
+    const modalContent = document.getElementById('modal-content')
+    
+    function showDeleteConfirmDialog(type, targetId) {
+        if (type == 'post') {
+            modalTitle.textContent = '게시글 삭제';
+            modalContent.textContent = '해당 게시글을 삭제하시겠어요?';
+            request_url = '/mypage/post/' + targetId + '/delete/';
+        } else if (type == 'link') {
+            modalTitle.textContent = '추천 자료 삭제';
+            modalContent.textContent = '해당 추천 자료를 삭제하시겠어요?';
+            request_url = '/mypage/link/' + targetId + '/delete/';
+        }
+
+        delModal.showModal();
+    }
+    
+    delBtnOnModal.addEventListener('click', () => {
+        let form = document.createElement('form');
+    
+        form.setAttribute('method', 'post');
+        form.setAttribute('action', request_url);
+
+        let csrf_token = document.createElement('input');
+        csrf_token.setAttribute('name', 'csrfmiddlewaretoken');
+        csrf_token.setAttribute('value', '{{ csrf_token }}');
+        form.appendChild(csrf_token);
+
+        document.body.appendChild(form);
+        form.submit();
+    })
+</script>
+{% endblock %}

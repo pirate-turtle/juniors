@@ -1,11 +1,14 @@
-from django.views.generic import TemplateView
-
-from django.views.generic import CreateView
+from typing import Any
+from django.db.models.query import QuerySet
+from django.views.generic import TemplateView, CreateView, ListView, DeleteView
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.mixins import AccessMixin
+from django.contrib.auth.mixins import AccessMixin, LoginRequiredMixin
+
+from reference_recommend.models import ReferenceLink
+from post.models import Post
 
 
 class HomeView(TemplateView):
@@ -43,3 +46,29 @@ class WriterMixin(AccessMixin):
         
         return super().dispatch(request, *args, **kwargs)
     
+
+class MyPageView(LoginRequiredMixin, ListView):
+    template_name = 'mypage.html'
+    context_object_name = 'posts'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['links'] = ReferenceLink.objects.filter(writer=self.request.user).order_by('-id')        
+        
+        return context
+    
+
+    def get_queryset(self):
+        return Post.objects.filter(writer=self.request.user).order_by('-modify_dt')
+    
+
+class MyPagePostDeleteView(WriterMixin, DeleteView):
+    model = Post
+    success_url = reverse_lazy('mypage')
+
+
+class MyPageLinkDeleteView(WriterMixin, DeleteView):
+    model = ReferenceLink
+    success_url = reverse_lazy('mypage')
+    
+        

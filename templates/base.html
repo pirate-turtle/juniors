@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.2.3/dist/zephyr/bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.0/dist/zephyr/bootstrap.css">
     
     {% load static %}
     <link rel="stylesheet" href="{% static 'base/custom.css' %}">
@@ -32,7 +32,7 @@
             <a class="nav-link" href="{% url 'recommend:link_list' %}">추천해요</a>
           </li>          
           <li class="nav-item">
-            <a class="nav-link disabled" href="#">게시판 (개발중)</a>
+            <a class="nav-link" href="{% url 'post:post_list' %}">게시판</a>
           </li>
           
         </ul>
@@ -41,7 +41,7 @@
             {% if user.is_active %}
             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">👨‍💻{{ user.get_username }}</a>
             <div class="dropdown-menu">
-              <a class="dropdown-item" href="{% url 'recommend:my_link' %}">나의 활동</a>
+              <a class="dropdown-item" href="{% url 'mypage' %}">나의 활동</a>
               <a class="dropdown-item" href="{% url 'password_change' %}">비밀번호 변경</a>
               <a class="dropdown-item" href="{% url 'logout' %}">로그아웃</a>              
             </div>
