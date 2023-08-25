@@ -26,7 +26,7 @@
         <legend class="mt-4">관련 분야</legend>
         {% for id, label in category %}
         <div class="form-check">            
-            <input class="form-check-input" type="radio" name="category" id="option{{ id }}" value="{{ id }}">
+            <input class="form-check-input" type="radio" name="category" id="option{{ id }}" value="{{ id }}" {% if id == object.category %} checked {% endif %}>
             <label class="form-check-label" for="option{{ id }}">{{ label }}</label>
         </div>
         {% endfor %}

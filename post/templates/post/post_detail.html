@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% block title %}{{ post.title }}{% endblock title %}
+{% block content %}
+
+{% if post.writer == user %}
+<button type="button" class="btn btn-light mx-1" onclick="location.href='{% url 'post:post_update' pk=post.id %}'">수정</button>
+<button type="button" class="btn btn-danger" onclick="showDeleteConfirmDialog('post', '{{ post.id }}')">삭제</button>
+{% endif %}
+
+    
+<div class="container">
+    <h3 style="font-weight:bold">{{ post.title }} </h3>
+    <small class="text-muted">
+        {{ post.modify_dt|date:"N d, Y" }}  &nbsp;&nbsp; |  작성자: {{ post.writer }}
+    </small>
+    <hr/>
+    <div class="content">
+        <p>{{ post.content|linebreaks }}</p>
+    </div>    
+</div>
+
+<br>
+<fieldset class="container mt-5">
+    <legend class="card-header mb-3" style="font-size:1.275rem; font-weight:bold">댓글({{ comments|length }})</legend>
+    {% if user.is_active %}
+    <div>
+        <form action="/post/{{ post.id }}/comments/" method="post">{% csrf_token %}
+            <textarea name="content" cols="80" rows="3" style="resize: none"></textarea>
+            <input type="submit" class="btn btn-primary" value="작성">
+        </form>
+    <div>
+    {% else %}
+    <textarea disabled cols="80" rows="3" style="resize: none">    
+        로그인 후 댓글을 작성하실 수 있습니다.
+    </textarea>
+    {% endif %}
+
+    <div class="mb-5">
+        {% for comment in comments %}
+            <hr style="width: 70%"/>
+            <div class="px-4">               
+                <div id="comment{{ comment.id }}">
+                    <b>{{ comment.writer }}</b><br/>
+                    {{ comment.content }}<br/>
+                    <small class="text-muted">{{ comment.modify_dt }}</small>
+                </div>
+                
+                {% if user == comment.writer %}
+                <div id="edit{{ comment.id }}" style="display: none;">
+                    <form action="/post/comments/{{ comment.id }}/update/" method="post">{% csrf_token %}
+                        <textarea name="content" cols="80" rows="3" style="resize: none">{{ comment.content }}</textarea>
+                        <input type="submit" class="btn btn-primary" value="변경">
+                    </form>
+                </div>
+                <div>
+                    <button type="button" id="edit-btn{{ comment.id }}" class="btn btn-light mx-1" onclick="showEditForm('{{ comment.id }}')">수정</button>
+                    <button type="button" id="delete-btn{{ comment.id }}" class="btn btn-danger" onclick="showDeleteConfirmDialog('comment', '{{ comment.id }}')">삭제</button>
+                </div>                
+                
+                {% endif %}                
+            </div>            
+        {% endfor %}
+    </div>
+
+</fieldset>
+
+<dialog id="delete-modal">
+    <form method="dialog">            
+        <div class="modal-header p-3">
+            <h5 id="modal-title">삭제</h5>
+            <span aria-hidden="true"></span>
+            </button>
+        </div>
+        <div class="modal-body px-3 pb-3">
+            <p id="modal-content">삭제하시겠어요?</p>
+        </div>
+        <div class="modal-footer px-2 py-2">
+            <button type="submit" class="btn btn-danger mx-1" id="delete-btn">삭제</button>
+            <button value="cancel" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+        </div>        
+    </form>
+</dialog>
+
+<script>
+    let request_url = undefined
+    const delModal = document.getElementById('delete-modal')
+    const delBtnOnModal = document.getElementById('delete-btn')
+    const modalTitle = document.getElementById('modal-title')
+    const modalContent = document.getElementById('modal-content')
+    
+    function showDeleteConfirmDialog(type, targetId = {{ post.id }}) {
+        if (type == 'post') {
+            modalTitle.textContent = '게시글 삭제';
+            modalContent.textContent = '해당 게시글을 삭제하시겠어요?';
+            request_url = '/post/' + targetId + '/delete/';
+        } else {
+            modalTitle.textContent = '댓글 삭제';
+            modalContent.textContent = '해당 댓글을 삭제하시겠어요?';
+            request_url = '/post/comments/' + targetId + '/delete/';
+        }
+
+        delModal.showModal();
+    }
+    
+    delBtnOnModal.addEventListener('click', () => {
+        let form = document.createElement('form');
+    
+        form.setAttribute('method', 'post');
+        form.setAttribute('action', request_url);
+
+        let csrf_token = document.createElement('input');
+        csrf_token.setAttribute('name', 'csrfmiddlewaretoken');
+        csrf_token.setAttribute('value', '{{ csrf_token }}');
+        form.appendChild(csrf_token);
+
+        document.body.appendChild(form);
+        form.submit();
+    })
+
+    function showEditForm(targetId) {
+        document.getElementById('edit' + targetId).style.display = 'block';
+        document.getElementById('comment' + targetId).style.display = 'none';
+        document.getElementById('edit-btn' + targetId).style.display = 'none';
+        document.getElementById('delete-btn' + targetId).style.display = 'none';
+    }
+        
+</script>
+{% endblock %}

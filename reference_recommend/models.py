@@ -8,7 +8,6 @@ class ReferenceLink(models.Model):
     - 필수
       - url : url    
       - 카테고리 (관련된 분야) : text, choices
-    - 선택
       - 메모 : text 
 
     등록 이후 시스템에서 채우기
@@ -22,7 +21,7 @@ class ReferenceLink(models.Model):
     """
     
     url = models.URLField(max_length=200, unique=True)
-    memo = models.CharField(max_length=50, blank=True, null=True)
+    memo = models.CharField(max_length=50)
     
     class Category(models.TextChoices):        
         WEB = 'wb', 'Web'
@@ -41,6 +40,6 @@ class ReferenceLink(models.Model):
     )
 
     title = models.CharField(max_length=15)
-    description = models.CharField(max_length=30)
+    description = models.CharField(max_length=40)
     image = models.URLField(max_length=200, blank=True, null=True)
     writer = models.ForeignKey(User, on_delete=models.CASCADE)
