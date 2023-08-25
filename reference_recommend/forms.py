@@ -31,7 +31,7 @@ class LinkRegisterForm(ModelForm):
                 attrs={
                     'class': 'form-control',
                     'placeholder': '해당 자료에 대해 간단히 설명해주세요 (선택)',
-                    'aria-describedby':'memoHelp'
+                    'aria-describedby':'memoHelp'                    
                 }
             )
         }
@@ -63,10 +63,10 @@ class LinkRegisterForm(ModelForm):
             else:
                 self.instance.image = image_url
 
-            # 사이트 설명이 30자를 초과하는 경우 처리
+            # 사이트 설명이 40자를 초과하는 경우 처리
             desc = soup.select_one('meta[property="og:description"]')['content']
-            if len(desc) > 30:
-                self.instance.description = desc[:27] + '...'
+            if len(desc) > 40:
+                self.instance.description = desc[:37] + '...'
             else:
                 self.instance.description = desc
 
