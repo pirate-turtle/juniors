@@ -10,8 +10,8 @@
     {% for info in object_list %}
     <div class="col-lg-3">            
         <div class="bs-component">
-            <div class="list-group">
-                <a href="{{ info.url }}" class="list-group-item-action flex-column align-items-start active">
+            <div class="list-group">                
+                <a href="{{ info.url }}" class="list-group-item-action active">
                     {% if info.image is not None %}
                     <img src="{{ info.image }}" class="d-block user-select-none">
                     {% else %}
@@ -19,34 +19,37 @@
                     <img src="{% static 'base/default.png' %}" class="d-block user-select-none">
                     {% endif %}
                 </a>
-                {% comment %} 
-                TODO 카드 높이 통일. 메모 필수로 변경하기
-                <a href="{{ info.url }}" class="list-group-item list-group-item-action flex-column align-items-start" style="height:16rem"> 
-                {% endcomment %}
+                <div class="button-area">
+                    {% if info.writer == user %}
+                    <button type="button" class="btn btn-light mx-1" onclick="location.href='{% url 'recommend:link_update' pk=info.id %}'">수정</button>
+                    <button type="button" class="btn btn-danger" onclick="showDeleteConfirmDialog({{ info.id }})">삭제</button>                        
+                    {% endif %}                    
+                </div>
                 <div class="list-group-item">                
                     <a href="{{ info.url }}" class="card-body" style="text-decoration:none;">
                         <span class="badge rounded-pill {{ info.category }}">{{ info.get_category_display }}</span>
-                        <p class="mb-1">
-                            {% if info.memo is not None %}
-                            {{ info.memo }}
-                            <hr/>
-                            {% endif %}                        
+                        <p class="mt-2 memo">
+                            {{ info.memo }}                            
                         </p>
-
-                        <div class="d-flex w-100 justify-content-between">
-                            <p class="mb-1 text-muted">{{ info.title }}</p>                        
-                        </div>
-
-                        <p class="text-muted" style="font-size:small">{{ info.description }}</p>                        
-                        <small class="text-muted" style="font-size:x-small; word-break: break-all">{{ info.url }}</small>                    
-                    </a>
-                    <div style="display: flex; justify-content: end; flex-direction: row;" class="mt-2">
-                        {% if info.writer == user %}
-                        <button type="button" class="btn btn-light mx-1" onclick="location.href='{% url 'recommend:link_update' pk=info.id %}'">수정</button>
-                        <button type="button" class="btn btn-danger" onclick="showDeleteConfirmDialog({{ info.id }})">삭제</button>                        
-                        {% endif %}
-                        
-                    </div>
+                        <hr/>
+                        <p class="text-muted"  style="font-size:small">
+                            {% if info.title|length < 26 %} 
+                            {{ info.title }} 
+                            {% else %} 
+                            {{ info.title|slice:":22" }}... 
+                            {% endif %}
+                        </p>
+                        <p class="my-1 text-muted description" style="font-size:small">
+                            {{ info.description }}
+                        </p>                        
+                        <small class="text-muted" style="font-size:x-small; word-break: break-all">
+                            {% if info.url|length < 42 %} 
+                            {{ info.url }} 
+                            {% else %} 
+                            {{ info.url|slice:":38" }}... 
+                            {% endif %}
+                        </small>                    
+                    </a>                    
                 </div>
             </div>
         </div>
