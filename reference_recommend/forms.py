@@ -52,22 +52,39 @@ class LinkRegisterForm(ModelForm):
             response.encoding = 'utf-8' # 한글이 깨지지 않도록 설정
             html = response.text            
             soup = BeautifulSoup(html, 'html.parser')
-            self.instance.title = soup.select_one('meta[property="og:title"]')['content']
+            
+            # 사이트 제목
+            title = soup.select_one('meta[property="og:title"]')
+            self.instance.title = title['content'] if title else ''
+            
+            
+            # 사이트 썸네일
+            image_url = soup.select_one('meta[property="og:image"]')
+            
+            if image_url:
+                image_url = image_url['content']
+            
+                # 이미지 url이 상대경로로 적힌 경우 처리
+                if image_url.startswith('/'):
+                    _url = url.split('://')
+                    top_url = _url[0] + '://' + _url[1].split('/')[0]
+                    self.instance.image = top_url + image_url
+                else:
+                    self.instance.image = image_url
 
-            image_url = soup.select_one('meta[property="og:image"]')['content']
-            # 이미지 url이 상대경로로 적힌 경우 처리
-            if image_url.startswith('/'):
-                _url = url.split('://')
-                top_url = _url[0] + '://' + _url[1].split('/')[0]
-                self.instance.image = top_url + image_url
+                
+            # 사이트 설명    
+            desc = soup.select_one('meta[property="og:description"]')
+            
+            if desc:
+                desc = desc['content']
+                
+                if len(desc) > 40:
+                    self.instance.description = desc[:37] + '...'
+                else:
+                    self.instance.description = desc
+                    
             else:
-                self.instance.image = image_url
-
-            # 사이트 설명이 40자를 초과하는 경우 처리
-            desc = soup.select_one('meta[property="og:description"]')['content']
-            if len(desc) > 40:
-                self.instance.description = desc[:37] + '...'
-            else:
-                self.instance.description = desc
+                self.instance.description = ''
 
         return url
