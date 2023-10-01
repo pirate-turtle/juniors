@@ -55,7 +55,16 @@ class LinkRegisterForm(ModelForm):
             
             # 사이트 제목
             title = soup.select_one('meta[property="og:title"]')
-            self.instance.title = title['content'] if title else ''
+            
+            if title:
+                title = title['content']
+                
+                if len(title) > 17:
+                    self.instance.title = title[:14] + '...'
+                else:
+                    self.instance.title = title
+            else:    
+                self.instance.title = ''
             
             
             # 사이트 썸네일
