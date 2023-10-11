@@ -39,7 +39,7 @@ class ReferenceLink(models.Model):
         default=Category.ETC
     )
 
-    title = models.CharField(max_length=15)
-    description = models.CharField(max_length=40)
+    title = models.CharField(max_length=15, blank=True, null=True)
+    description = models.CharField(max_length=40, blank=True, null=True)
     image = models.URLField(max_length=200, blank=True, null=True)
     writer = models.ForeignKey(User, on_delete=models.CASCADE)
