@@ -30,7 +30,7 @@ class LinkRegisterForm(ModelForm):
             'memo': TextInput(
                 attrs={
                     'class': 'form-control',
-                    'placeholder': '해당 자료에 대해 간단히 설명해주세요 (선택)',
+                    'placeholder': '해당 자료에 대해 간단히 설명해주세요',
                     'aria-describedby':'memoHelp'                    
                 }
             )
