@@ -1,3 +1,32 @@
 {% extends 'base.html' %}
 {% block title %}주니어즈{% endblock title %}
-{% block content %} 콘텐츠 영역 {% endblock content %}
+{% block content %}
+
+<header>
+    <h1 class="page-title">안녕하세요😊</h1>
+    <p class="page-description"></p>
+</header>
+<div>
+    <h2>초보 개발자를 위한 공간 주니어즈입니다</h2>
+    <br/>
+    <p>다른 사람들은 어떻게 공부하는지, 요즘 관심사는 뭔지 궁금하지 않으셨나요?</p>
+    <p>링크 공유 기능과 게시글 기능으로 교류해보세요!</p>
+</div>
+<div class="my-5">
+    <h3>추천 링크 공유</h3>
+    <p>본인이 공부할때 좋은 참고가 됐던 링크를 간단한 메모와 함께 공유해주세요!</p>
+    <p>비슷한 관심사를 가지고 있는 개발자에게 도움이 될 것입니다.</p>
+    <small>💡이미 등록된 링크는 중복으로 등록할 수 없습니다.</small>
+    {% load static %}
+    <img src="{% static 'base/recommend.png' %}" style="width:85%">
+</div>
+
+<div class="mb-5">
+    <h3>게시판</h3>
+    <p>커리어와 관련된 고민이 있다면 글을 쓰고 댓글을 달며 다른 사람과 교류해보세요!</p>
+    <p>다양한 경험을 공유하다보면 해결법을 찾으실 수 있을거예요.</p>
+    <img src="{% static 'base/post.png' %}" style="width:85%">
+</div>
+
+
+{% endblock content %}
