@@ -2,15 +2,15 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy, reverse
 from .models import Post, Comment
-from .forms import CustomPaginator
+from .forms import CustomPaginator, PostForm
 from site4programmers.views import WriterMixin
 
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
-    fields = ['title', 'content']
     template_name = 'post/post_create.html'
     success_url = reverse_lazy('post:post_list')
+    form_class = PostForm
 
     def form_valid(self, form):
         form.instance.writer = self.request.user
@@ -20,9 +20,10 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
 class PostUpdateView(WriterMixin, UpdateView):
     model = Post
-    fields = ['title', 'content']
     template_name = 'post/post_create.html'
     success_url = reverse_lazy('post:post_detail')
+    form_class = PostForm
+
 
     def get_success_url(self) -> str:
         return reverse('post:post_detail', kwargs={'pk':self.object.id})

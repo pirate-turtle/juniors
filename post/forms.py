@@ -1,13 +1,35 @@
 from typing import Dict, Any
 from django.core.paginator import Page
 from django.forms import ModelForm
-from .models import Comment
+from django.forms import TextInput, Textarea
+from .models import Post, Comment
 
 
-class CommentForm(ModelForm):
+class PostForm(ModelForm):
     class Meta:
-        model = Comment
-        exclude = ('post', 'writer')
+        model = Post
+
+        fields = ['title', 'content']
+        widgets = {
+            'title': TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': '제목을 입력해주세요 (최대 50자)',
+                    'style': 'width: 50%',
+                    'aria-describedby':'titleHelp'
+                    }
+            ),
+
+            'content': Textarea(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': '게시글 내용을 입력해주세요',
+                    'style': 'width: 50%; resize: none; height: 500px',
+                    'aria-describedby':'contentHelp'                    
+                }
+            )
+        }
+
 
 
 class CustomPaginator():
